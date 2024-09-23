@@ -1,40 +1,23 @@
-import React from "react"
-import Button from "./Button"
-
-export default function NavButtons(props) {
+export default function NavButtons({ wordData, position }) {
+	const { wordsDataArray, currentWord, setCurrentWord } = wordData;
   
-	const { wordsDataArray, currentWord, setCurrentWord, position } = props
-
-	function changeWord(currentIndex, direction, position) {
-		let nextIndex
-
-		if (direction === "forward") {
-			nextIndex =
-				currentIndex === wordsDataArray.length - 1 ? 0 : currentIndex + 1
-		} else {
-			nextIndex =
-				currentIndex === 0 ? wordsDataArray.length - 1 : currentIndex - 1
-		}
-		setCurrentWord(wordsDataArray[nextIndex])
-
-		position === "bottom" &&
-			window.scrollTo({
-				top: 0,
-				behavior: "smooth",
-			})
-	}
-
+	const handleNext = () => {
+	  const currentIndex = wordsDataArray.indexOf(currentWord);
+	  const nextIndex = (currentIndex + 1) % wordsDataArray.length;
+	  setCurrentWord(wordsDataArray[nextIndex]);
+	};
+  
+	const handleBack = () => {
+	  const currentIndex = wordsDataArray.indexOf(currentWord);
+	  const prevIndex = (currentIndex - 1 + wordsDataArray.length) % wordsDataArray.length;
+	  setCurrentWord(wordsDataArray[prevIndex]);
+	};
+  
 	return (
-		<div className="two-buttons-container">
-			<Button
-				type="backward"
-				clickHandler={() => changeWord(wordsDataArray.indexOf(currentWord), "backward", position)}
-			/>
-
-			<Button
-				type="forward"
-				clickHandler={() => changeWord(wordsDataArray.indexOf(currentWord), "forward", position)}
-			/>
-		</div>
-	)
-}
+	  <div className={`two-buttons-container ${position}`}>
+		<button  onClick={handleBack}>Back</button>
+		<button onClick={handleNext}>Next</button>
+	  </div>
+	);
+  }
+  
